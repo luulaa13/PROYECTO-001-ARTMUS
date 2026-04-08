@@ -4,6 +4,34 @@ import Icon from "react-native-vector-icons/Ionicons";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const LoginScreen: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  // Regex para @gmail o @hotmail con .com o .es
+  const emailRegex = /^[\w.-]+@(gmail|hotmail)\.(com|es)$/i;
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+
+    // Validación en tiempo real
+    if (text === '' || emailRegex.test(text)) {
+      setEmailError('');
+    } else {
+      setEmailError('Formato incorrecto');
+    }
+  };
+
+  const handleLogin = () => {
+    if (!emailRegex.test(email)) {
+      setEmailError('Formato incorrecto');
+      return;
+    }
+
+    console.log("Email válido:", email);
+    // Aquí  seguir con la lógica de login
+  };
+
+  
   return (
     <View style={styles.container}>
       {/* Logo */}
@@ -14,14 +42,17 @@ const LoginScreen: React.FC = () => {
 
       {/* Email */}
       <Text style={styles.label}>Email</Text>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, emailError ? { borderColor: 'red' } : null]}>
         <Icon name="mail-outline" size={20} color="#1E3A5F" />
         <TextInput
-          placeholder="asdfdsfdsf@gmail.com"
+          placeholder="ejemplo@gmail.com"
           style={styles.input}
           keyboardType="email-address"
+          value={email}
+          onChangeText={handleEmailChange}
         />
       </View>
+      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
       {/* Password */}
       <Text style={styles.label}>Password</Text>
@@ -125,6 +156,9 @@ logo: {
   input: {
     flex: 1,
     marginLeft: 10,
+  },
+  errorText: {
+    color: 'red', marginBottom: 10 
   },
   forgot: {
     textAlign: "right",
