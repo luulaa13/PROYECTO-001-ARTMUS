@@ -35,7 +35,10 @@ const LoginScreen: React.FC = () => {
       </View>
 
       {/* Forgot password */}
+       <TouchableOpacity  
+      activeOpacity={0.4}>
       <Text style={styles.forgot}>Forgot password ?</Text>
+      </TouchableOpacity>
 
       {/* Button */}
           <Pressable
@@ -76,9 +79,15 @@ const LoginScreen: React.FC = () => {
       </TouchableOpacity>
 
       {/* Signup */}
-      <Text style={styles.signup}>
-        Need an account? <Text style={styles.signupBold}>Sign up</Text>
-      </Text>
+     <View style={styles.signupContainer}>
+        <Text style={styles.signup}>
+            Need an account?{' '}
+        </Text>
+        <TouchableOpacity onPress={() => console.log('Sign up pressed')}>
+            <Text style={styles.signupBold}>Sign up</Text>
+        </TouchableOpacity>
+    </View>
+
     </View>
   );
 };
@@ -164,11 +173,20 @@ logo: {
     color: "#1E3A5F",
     marginLeft: 20,
   },
+
+  signupContainer: {
+  flexDirection: 'row',       // texto y botón en la misma línea
+  justifyContent: 'center',   // centrado horizontal
+  marginTop: 20,
+},
+
   signup: {
+    fontSize: 14,
     textAlign: "center",
     color: "#999999",
   },
   signupBold: {
+     fontSize: 14,
     fontWeight: "bold",
      color: "#1E3A5F",
   },
