@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {Image, View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -10,28 +10,32 @@ const LoginScreen: React.FC = () => {
   // Regex para @gmail o @hotmail con .com o .es
   const emailRegex = /^[\w.-]+@(gmail|hotmail)\.(com|es)$/i;
 
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
+const handleEmailChange = (text: string) => {
+  setEmail(text);
 
-    // Validación en tiempo real
-    if (text === '' || emailRegex.test(text)) {
-      setEmailError('');
-    } else {
-      setEmailError('Formato incorrecto');
-    }
-  };
+  if (text === '') {
+    setEmailError('Email requerido');  // caso vacío
+  } else if (!emailRegex.test(text)) {
+    setEmailError('Formato incorrecto'); // formato incorrecto
+  } else {
+    setEmailError('');
+  }
+};
 
-  const handleLogin = () => {
-    if (!emailRegex.test(email)) {
-      setEmailError('Formato incorrecto');
-      return;
-    }
+const handleLogin = () => {
+  if (email === '') {
+    setEmailError('Email requerido');
+    return;
+  }
 
-    console.log("Email válido:", email);
-    // Aquí  seguir con la lógica de login
-  };
+  if (!emailRegex.test(email)) {
+    setEmailError('Formato incorrecto');
+    return;
+  }
 
-  
+  console.log('Email válido:', email);
+  // Aquí continúa la lógica de login
+};
   return (
     <View style={styles.container}>
       {/* Logo */}
@@ -52,7 +56,12 @@ const LoginScreen: React.FC = () => {
           onChangeText={handleEmailChange}
         />
       </View>
-      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+      {emailError ? (
+        <View style={styles.errorContainer}>
+          <Icon name="alert-circle" size={16} color="red" style={{ marginRight: 5 }} />
+          <Text style={styles.errorText}>{emailError}</Text>
+        </View>
+      ) : null}
 
       {/* Password */}
       <Text style={styles.label}>Password</Text>
@@ -158,7 +167,9 @@ logo: {
     marginLeft: 10,
   },
   errorText: {
-    color: 'red', marginBottom: 10 
+    color: 'red', 
+    lineHeight: 16,  // igual que el tamaño del icono
+    fontSize: 14,
   },
   forgot: {
     textAlign: "right",
@@ -239,4 +250,9 @@ logo: {
     height: 22,
     resizeMode: 'contain',   
   },
+  errorContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 10,
+}
 });
